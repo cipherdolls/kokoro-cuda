@@ -1,6 +1,6 @@
 # Kokoro TTS Benchmark Results
 
-**Date:** 2026-03-19 09:19 UTC
+**Date:** 2026-03-19 09:35 UTC
 
 ## Hardware
 
@@ -27,76 +27,76 @@
 
 | Format | Avg Latency | Avg File Size | Whisper Similarity |
 |--------|-------------|---------------|-------------------|
-| wav | 100ms | 735.4KB | 98.58% |
-| mp3 | 119ms | 308.1KB | 98.58% |
-| opus | 125ms | 380.2KB | 98.58% |
-| flac | 63ms | 370.4KB | 98.58% |
-| pcm | 60ms | 735.4KB | n/a |
+| wav | 101ms | 735.4KB | 98.58% |
+| mp3 | 120ms | 308.1KB | 98.58% |
+| opus | 124ms | 380.0KB | 98.58% |
+| flac | 62ms | 370.4KB | 98.58% |
+| pcm | 57ms | 735.4KB | n/a |
 
 ## Results: WAV
 
 | Test | Input Length | Avg Latency | Min | Max | File Size |
 |------|-------------|-------------|-----|-----|-----------|
-| short | 22 chars | 220ms | 19ms | 621ms | 93.8KB |
-| medium | 105 chars | 36ms | 31ms | 45ms | 331.7KB |
-| long | 323 chars | 109ms | 67ms | 186ms | 972.7KB |
-| numbers | 74 chars | 33ms | 30ms | 40ms | 294.2KB |
+| short | 22 chars | 223ms | 20ms | 627ms | 93.8KB |
+| medium | 105 chars | 36ms | 32ms | 45ms | 331.7KB |
+| long | 323 chars | 111ms | 70ms | 187ms | 972.7KB |
+| numbers | 74 chars | 33ms | 29ms | 41ms | 294.2KB |
 | punctuation | 69 chars | 30ms | 26ms | 37ms | 199.3KB |
-| very_long | 910 chars | 173ms | 169ms | 180ms | 2520.7KB |
+| very_long | 910 chars | 176ms | 170ms | 181ms | 2520.7KB |
 
-Avg latency: **100ms** | Throughput: **2498 chars/sec**
+Avg latency: **101ms** | Throughput: **2468 chars/sec**
 
 ## Results: MP3
 
 | Test | Input Length | Avg Latency | Min | Max | File Size |
 |------|-------------|-------------|-----|-----|-----------|
-| short | 22 chars | 55ms | 50ms | 64ms | 40.8KB |
-| medium | 105 chars | 73ms | 69ms | 80ms | 139.7KB |
-| long | 323 chars | 144ms | 141ms | 148ms | 406.9KB |
-| numbers | 74 chars | 75ms | 72ms | 79ms | 124.3KB |
-| punctuation | 69 chars | 62ms | 58ms | 69ms | 84.9KB |
-| very_long | 910 chars | 305ms | 301ms | 307ms | 1051.9KB |
+| short | 22 chars | 67ms | 49ms | 102ms | 40.8KB |
+| medium | 105 chars | 74ms | 69ms | 82ms | 139.7KB |
+| long | 323 chars | 140ms | 139ms | 141ms | 406.9KB |
+| numbers | 74 chars | 71ms | 68ms | 77ms | 124.3KB |
+| punctuation | 69 chars | 63ms | 58ms | 69ms | 84.9KB |
+| very_long | 910 chars | 306ms | 305ms | 307ms | 1051.9KB |
 
-Avg latency: **119ms** | Throughput: **2107 chars/sec**
+Avg latency: **120ms** | Throughput: **2086 chars/sec**
 
 ## Results: OPUS
 
 | Test | Input Length | Avg Latency | Min | Max | File Size |
 |------|-------------|-------------|-----|-----|-----------|
-| short | 22 chars | 52ms | 49ms | 59ms | 38.0KB |
-| medium | 105 chars | 77ms | 72ms | 84ms | 168.0KB |
-| long | 323 chars | 152ms | 150ms | 155ms | 508.7KB |
-| numbers | 74 chars | 75ms | 72ms | 82ms | 147.4KB |
-| punctuation | 69 chars | 63ms | 58ms | 70ms | 98.2KB |
-| very_long | 910 chars | 328ms | 325ms | 331ms | 1321.0KB |
+| short | 22 chars | 54ms | 49ms | 63ms | 37.8KB |
+| medium | 105 chars | 76ms | 72ms | 83ms | 167.7KB |
+| long | 323 chars | 149ms | 149ms | 149ms | 509.0KB |
+| numbers | 74 chars | 72ms | 69ms | 79ms | 147.3KB |
+| punctuation | 69 chars | 64ms | 61ms | 70ms | 98.0KB |
+| very_long | 910 chars | 327ms | 324ms | 329ms | 1320.1KB |
 
-Avg latency: **125ms** | Throughput: **2011 chars/sec**
+Avg latency: **124ms** | Throughput: **2024 chars/sec**
 
 ## Results: FLAC
 
 | Test | Input Length | Avg Latency | Min | Max | File Size |
 |------|-------------|-------------|-----|-----|-----------|
-| short | 22 chars | 21ms | 20ms | 23ms | 38.1KB |
-| medium | 105 chars | 34ms | 33ms | 36ms | 163.7KB |
-| long | 323 chars | 68ms | 68ms | 69ms | 502.2KB |
-| numbers | 74 chars | 36ms | 34ms | 37ms | 141.7KB |
-| punctuation | 69 chars | 30ms | 29ms | 31ms | 92.4KB |
-| very_long | 910 chars | 187ms | 185ms | 189ms | 1284.1KB |
+| short | 22 chars | 24ms | 20ms | 32ms | 38.1KB |
+| medium | 105 chars | 34ms | 32ms | 35ms | 163.8KB |
+| long | 323 chars | 69ms | 68ms | 69ms | 502.1KB |
+| numbers | 74 chars | 31ms | 31ms | 32ms | 141.7KB |
+| punctuation | 69 chars | 28ms | 27ms | 29ms | 92.3KB |
+| very_long | 910 chars | 184ms | 183ms | 187ms | 1284.5KB |
 
-Avg latency: **63ms** | Throughput: **3992 chars/sec**
+Avg latency: **62ms** | Throughput: **4069 chars/sec**
 
 ## Results: PCM
 
 | Test | Input Length | Avg Latency | Min | Max | File Size |
 |------|-------------|-------------|-----|-----|-----------|
-| short | 22 chars | 25ms | 23ms | 28ms | 93.8KB |
-| medium | 105 chars | 35ms | 34ms | 36ms | 331.6KB |
-| long | 323 chars | 70ms | 69ms | 71ms | 972.7KB |
-| numbers | 74 chars | 31ms | 31ms | 32ms | 294.1KB |
-| punctuation | 69 chars | 29ms | 29ms | 31ms | 199.2KB |
-| very_long | 910 chars | 171ms | 167ms | 178ms | 2520.7KB |
+| short | 22 chars | 20ms | 20ms | 22ms | 93.8KB |
+| medium | 105 chars | 32ms | 31ms | 33ms | 331.6KB |
+| long | 323 chars | 65ms | 65ms | 66ms | 972.7KB |
+| numbers | 74 chars | 29ms | 29ms | 30ms | 294.1KB |
+| punctuation | 69 chars | 26ms | 26ms | 26ms | 199.2KB |
+| very_long | 910 chars | 168ms | 166ms | 169ms | 2520.7KB |
 
-Avg latency: **60ms** | Throughput: **4154 chars/sec**
+Avg latency: **57ms** | Throughput: **4404 chars/sec**
 
 ## Whisper Validation Details
 
