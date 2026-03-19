@@ -10,7 +10,7 @@ from typing import Optional
 import numpy as np
 import soundfile as sf
 from fastapi import FastAPI, HTTPException
-from fastapi.responses import Response, StreamingResponse
+from fastapi.responses import HTMLResponse, Response, StreamingResponse
 from pydantic import BaseModel
 from pydub import AudioSegment
 
@@ -124,6 +124,135 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="Kokoro TTS", version="0.1.0", lifespan=lifespan)
+
+
+@app.get("/", response_class=HTMLResponse)
+async def web_ui():
+    return """<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kokoro TTS</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, sans-serif; background: #0a0a0a; color: #e0e0e0; display: flex; justify-content: center; padding: 2rem; }
+  .container { width: 100%; max-width: 640px; }
+  h1 { font-size: 1.5rem; margin-bottom: 1.5rem; }
+  textarea { width: 100%; height: 120px; padding: 0.75rem; border: 1px solid #333; border-radius: 8px; background: #1a1a1a; color: #e0e0e0; font-size: 1rem; resize: vertical; }
+  .controls { display: flex; gap: 0.75rem; margin-top: 0.75rem; flex-wrap: wrap; align-items: end; }
+  .field { display: flex; flex-direction: column; gap: 0.25rem; }
+  .field label { font-size: 0.75rem; color: #888; }
+  select, input[type="number"] { padding: 0.5rem; border: 1px solid #333; border-radius: 6px; background: #1a1a1a; color: #e0e0e0; font-size: 0.875rem; }
+  input[type="number"] { width: 5rem; }
+  button { padding: 0.5rem 1.5rem; border: none; border-radius: 6px; background: #2563eb; color: white; font-size: 0.875rem; cursor: pointer; }
+  button:hover { background: #1d4ed8; }
+  button:disabled { background: #333; cursor: not-allowed; }
+  .status { margin-top: 1rem; font-size: 0.875rem; color: #888; min-height: 1.25rem; }
+  .status.error { color: #ef4444; }
+  audio { margin-top: 1rem; width: 100%; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Kokoro TTS</h1>
+  <textarea id="text" placeholder="Type text to synthesize...">Hello, this is a test of the Kokoro text to speech system.</textarea>
+  <div class="controls">
+    <div class="field">
+      <label>Voice</label>
+      <select id="voice"></select>
+    </div>
+    <div class="field">
+      <label>Speed</label>
+      <input type="number" id="speed" value="1.0" min="0.5" max="2.0" step="0.1">
+    </div>
+    <div class="field">
+      <label>Format</label>
+      <select id="format">
+        <option value="wav">WAV</option>
+        <option value="mp3">MP3</option>
+        <option value="opus">Opus</option>
+        <option value="flac">FLAC</option>
+      </select>
+    </div>
+    <button id="btn" onclick="speak()">Speak</button>
+  </div>
+  <div id="status" class="status"></div>
+  <audio id="player" controls hidden></audio>
+</div>
+<script>
+async function loadVoices() {
+  try {
+    const res = await fetch('/v1/voices');
+    const data = await res.json();
+    const sel = document.getElementById('voice');
+    sel.innerHTML = '';
+    data.voices.forEach(v => {
+      const opt = document.createElement('option');
+      opt.value = v;
+      opt.textContent = v;
+      if (v === 'af_heart') opt.selected = true;
+      sel.appendChild(opt);
+    });
+  } catch (e) { console.error('Failed to load voices:', e); }
+}
+loadVoices();
+
+async function speak() {
+  const btn = document.getElementById('btn');
+  const status = document.getElementById('status');
+  const player = document.getElementById('player');
+  const text = document.getElementById('text').value.trim();
+  if (!text) return;
+
+  btn.disabled = true;
+  status.className = 'status';
+  status.textContent = 'Generating...';
+  player.hidden = true;
+
+  try {
+    const t0 = performance.now();
+    const res = await fetch('/v1/audio/speech', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        input: text,
+        voice: document.getElementById('voice').value,
+        speed: parseFloat(document.getElementById('speed').value),
+        response_format: document.getElementById('format').value,
+      }),
+    });
+    if (!res.ok) throw new Error(await res.text());
+
+    const blob = await res.blob();
+    const ms = Math.round(performance.now() - t0);
+    const url = URL.createObjectURL(blob);
+
+    player.src = url;
+    player.hidden = false;
+    player.play();
+    status.textContent = `Generated in ${ms}ms (${(blob.size / 1024).toFixed(1)} KB)`;
+  } catch (e) {
+    status.className = 'status error';
+    status.textContent = 'Error: ' + e.message;
+  } finally {
+    btn.disabled = false;
+  }
+}
+</script>
+</body>
+</html>"""
+
+
+@app.get("/v1/voices")
+async def list_voices():
+    """List available voice packs."""
+    voices = sorted(
+        os.path.splitext(f)[0]
+        for f in os.listdir(VOICES_DIR)
+        if f.endswith(".pt")
+    )
+    return {"voices": voices}
 
 
 @app.get("/health")

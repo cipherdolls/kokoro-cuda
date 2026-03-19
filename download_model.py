@@ -34,21 +34,41 @@ def download_model(model_dir: str) -> None:
     print(f"Model files downloaded to {model_dir}")
 
 
+VOICES = [
+    "af_alloy", "af_aoede", "af_bella", "af_heart", "af_jessica", "af_kore",
+    "af_nicole", "af_nova", "af_river", "af_sarah", "af_sky",
+    "am_adam", "am_echo", "am_eric", "am_fenrir", "am_liam", "am_michael",
+    "am_onyx", "am_puck", "am_santa",
+    "bf_alice", "bf_emma", "bf_isabella", "bf_lily",
+    "bm_daniel", "bm_fable", "bm_george", "bm_lewis",
+    "ef_dora", "em_alex", "em_santa",
+    "ff_siwis",
+    "hf_alpha", "hf_beta", "hm_omega", "hm_psi",
+    "if_sara", "im_nicola",
+    "jf_alpha", "jf_gongitsune", "jf_nezumi", "jf_tebukuro", "jm_kumo",
+    "pf_dora", "pm_alex", "pm_santa",
+    "zf_xiaobei", "zf_xiaoni", "zf_xiaoxiao", "zf_xiaoyi",
+]
+
+
 def download_voices(voices_dir: str) -> None:
-    """Download default voice pack from HuggingFace."""
+    """Download all voice packs from HuggingFace."""
     os.makedirs(voices_dir, exist_ok=True)
 
-    voice_path = os.path.join(voices_dir, "af_heart.pt")
-    if os.path.exists(voice_path) and os.path.getsize(voice_path) > 0:
-        print("Voice files already exist")
+    base_url = "https://huggingface.co/hexgrad/Kokoro-82M/resolve/main/voices"
+    existing = {f for f in os.listdir(voices_dir) if f.endswith(".pt") and os.path.getsize(os.path.join(voices_dir, f)) > 0}
+    to_download = [v for v in VOICES if f"{v}.pt" not in existing]
+
+    if not to_download:
+        print(f"All {len(VOICES)} voices already exist")
         return
 
-    base_url = "https://huggingface.co/hexgrad/Kokoro-82M/resolve/main/voices"
+    print(f"Downloading {len(to_download)} voices ({len(existing)} already exist)...")
+    for i, voice in enumerate(to_download, 1):
+        print(f"  [{i}/{len(to_download)}] {voice}.pt")
+        urlretrieve(f"{base_url}/{voice}.pt", os.path.join(voices_dir, f"{voice}.pt"))
 
-    print("Downloading default voice (af_heart)...")
-    urlretrieve(f"{base_url}/af_heart.pt", voice_path)
-
-    print(f"Voice files downloaded to {voices_dir}")
+    print(f"All {len(VOICES)} voices downloaded to {voices_dir}")
 
 
 if __name__ == "__main__":
