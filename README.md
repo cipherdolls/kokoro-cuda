@@ -10,9 +10,11 @@ Minimal Kokoro TTS API with CUDA support for NVIDIA Blackwell GPUs.
 
 - Single FastAPI endpoint for text-to-speech
 - Streaming audio (WAV/PCM) and encoded formats (MP3, Opus, FLAC)
+- 49 built-in voices (American/British English, Spanish, French, Hindi, Italian, Japanese, Portuguese, Chinese)
 - Configurable voice, speed, and bitrate
-- Automatic model download on first start
+- Web UI at `/` — type text, pick a voice, and hear audio instantly
 - Swagger UI at `/docs`
+- Automatic model + voice download on first start (persisted via Docker volumes)
 
 ## Quick Start
 
@@ -38,10 +40,14 @@ docker run --gpus all -p 8880:8880 -v kokoro-models:/app/models -v kokoro-voices
 | Parameter | Default | Options |
 |-----------|---------|---------|
 | input | (required) | Any text |
-| voice | af_heart | Any `.pt` voice pack |
+| voice | af_heart | 49 voices — see `GET /v1/voices` |
 | speed | 1.0 | 0.5 - 2.0 |
 | response_format | wav | wav, mp3, opus, flac, pcm |
 | bitrate | 192k | 128k, 192k, 320k |
+
+### `GET /v1/voices`
+
+Returns available voice packs.
 
 ### `GET /health`
 
@@ -60,6 +66,26 @@ curl -X POST http://localhost:8880/v1/audio/speech \
   -H "Content-Type: application/json" \
   -d '{"input": "Hello world", "response_format": "mp3", "bitrate": "320k"}' -o hello.mp3
 ```
+
+## Web UI
+
+Open `http://localhost:8880/` in your browser. Select a voice, adjust speed, type text, and click **Speak** to hear the audio immediately.
+
+## Voices
+
+49 voice packs are downloaded automatically on first start. Naming convention: `{lang}{gender}_{name}`
+
+| Prefix | Language | Voices |
+|--------|----------|--------|
+| `af_` / `am_` | American English | 20 |
+| `bf_` / `bm_` | British English | 8 |
+| `ef_` / `em_` | Spanish | 3 |
+| `ff_` | French | 1 |
+| `hf_` / `hm_` | Hindi | 4 |
+| `if_` / `im_` | Italian | 2 |
+| `jf_` / `jm_` | Japanese | 5 |
+| `pf_` / `pm_` | Portuguese | 3 |
+| `zf_` | Chinese | 4 |
 
 ## Benchmark
 
