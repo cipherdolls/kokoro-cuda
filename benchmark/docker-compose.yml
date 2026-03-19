@@ -1,0 +1,77 @@
+name: kokoro-cuda-benchmark
+
+services:
+  kokoro:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    ports:
+      - "8880:8880"
+    environment:
+      - MODEL_DIR=/app/models
+      - VOICES_DIR=/app/voices
+    volumes:
+      - models:/app/models
+      - voices:/app/voices
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8880/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 60s
+
+  whisper:
+    image: cipherdolls/whisper
+    ports:
+      - "9000:9000"
+    environment:
+      - ASR_MODEL=large-v3-turbo
+      - COMPUTE_TYPE=float16
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=compute,utility
+    volumes:
+      - whisper-models:/root/.cache/huggingface
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:9000/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 60s
+
+  benchmark:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./output:/app/output
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    depends_on:
+      kokoro:
+        condition: service_healthy
+      whisper:
+        condition: service_healthy
+
+volumes:
+  models:
+  voices:
+  whisper-models:

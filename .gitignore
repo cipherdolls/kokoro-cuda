@@ -1,0 +1,5 @@
+benchmark/output/*/wav/
+benchmark/output/*/mp3/
+benchmark/output/*/opus/
+benchmark/output/*/flac/
+benchmark/output/*/pcm/

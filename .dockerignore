@@ -1,0 +1,4 @@
+benchmark/
+*.md
+.dockerignore
+.gitignore
