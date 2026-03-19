@@ -1,6 +1,10 @@
 # Kokoro CUDA
 
+[![Docker Image](https://github.com/cipherdolls/kokoro-cuda/actions/workflows/docker.yml/badge.svg)](https://github.com/cipherdolls/kokoro-cuda/actions/workflows/docker.yml)
+
 Minimal Kokoro TTS API with CUDA support for NVIDIA Blackwell GPUs.
+
+**Source:** https://github.com/cipherdolls/kokoro-cuda
 
 ## Features
 
