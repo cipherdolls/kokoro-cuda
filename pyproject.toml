@@ -18,14 +18,14 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-gpu = ["torch==2.9.1+cu130"]
+gpu = ["torch==2.9.1+cu128"]
 
 [tool.uv.sources]
 torch = [{ index = "pytorch-cuda", extra = "gpu" }]
 
 [[tool.uv.index]]
 name = "pytorch-cuda"
-url = "https://download.pytorch.org/whl/cu130"
+url = "https://download.pytorch.org/whl/cu128"
 explicit = true
 
 [build-system]
