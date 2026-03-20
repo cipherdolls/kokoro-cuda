@@ -2,7 +2,7 @@
 
 [![Docker Image](https://github.com/cipherdolls/kokoro-cuda/actions/workflows/docker.yml/badge.svg)](https://github.com/cipherdolls/kokoro-cuda/actions/workflows/docker.yml)
 
-Minimal Kokoro TTS API with CUDA support for NVIDIA Blackwell GPUs.
+Minimal Kokoro TTS API with CUDA support for NVIDIA GPUs (Ada Lovelace and newer).
 
 **Source:** https://github.com/cipherdolls/kokoro-cuda
 
@@ -104,11 +104,11 @@ Results are saved to `benchmark/output/<GPU_NAME>/report.md`. See [latest result
 main.py            — FastAPI app, model loading, streaming TTS endpoint
 download_model.py  — Downloads model + voice pack on first start
 entrypoint.sh      — Runs download then starts uvicorn
-Dockerfile         — CUDA 13.0 Blackwell image
+Dockerfile         — CUDA 12.8 runtime image (Ada Lovelace + Blackwell)
 benchmark/         — Benchmark suite with Whisper validation
 ```
 
 ## Requirements
 
-- NVIDIA GPU with CUDA 13.0+ (Blackwell / SM 120)
+- NVIDIA GPU with CUDA 12.8+ (RTX 4090 / RTX 5090 and similar)
 - Docker with NVIDIA Container Toolkit

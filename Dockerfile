@@ -1,4 +1,4 @@
-FROM nvcr.io/nvidia/cuda:13.0.0-cudnn-runtime-ubuntu24.04
+FROM nvcr.io/nvidia/cuda:12.8.0-cudnn-runtime-ubuntu24.04
 
 RUN apt-get update -y && \
     apt-get install -y python3.10 python3-venv espeak-ng espeak-ng-data \
